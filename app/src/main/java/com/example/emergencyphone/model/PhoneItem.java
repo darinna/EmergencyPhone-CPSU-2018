@@ -5,15 +5,19 @@ import java.util.Locale;
 public class PhoneItem {
 
     public final long _id;
-    public final String title;
-    public final String number;
-    public final String image;
+    public final String name;
+    public final String age;
+    public final String position;
+    public final String department;
+    public final String tel;
 
-    public PhoneItem(long _id, String title, String number, String image) {
+    public PhoneItem(long _id, String name, String age, String position , String department , String tel) {
         this._id = _id;
-        this.title = title;
-        this.number = number;
-        this.image = image;
+        this.name = name;
+        this.age = age;
+        this.position = position;
+        this.department = department;
+        this.tel = tel;
     }
 
     @Override
@@ -21,8 +25,8 @@ public class PhoneItem {
         String msg = String.format(
                 Locale.getDefault(),
                 "%s (%s)",
-                this.title,
-                this.number
+                this.name,
+                this.age
         );
         return msg;
     }

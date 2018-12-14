@@ -45,30 +45,15 @@ public class PhoneListAdapter extends ArrayAdapter<PhoneItem> {
 
         TextView titleTextView = view.findViewById(R.id.title_text_view);
         TextView numberTextView = view.findViewById(R.id.number_text_view);
-        ImageView imageView = view.findViewById(R.id.image_view);
+
 
         PhoneItem phoneItem = mPhoneItemList.get(position);
-        String title = phoneItem.title;
-        String number = phoneItem.number;
-        String filename = phoneItem.image;
+        String title = phoneItem.department;
+        String number = phoneItem.name;
+
 
         titleTextView.setText(title);
         numberTextView.setText(number);
-
-        AssetManager am = mContext.getAssets();
-        try {
-            InputStream is = am.open(filename);
-            Drawable drawable = Drawable.createFromStream(is, "");
-            imageView.setImageDrawable(drawable);
-        } catch (IOException e) {
-            File privateDir = mContext.getFilesDir();
-            File logoFile = new File(privateDir, filename);
-
-            Bitmap bitmap = BitmapFactory.decodeFile(logoFile.getAbsolutePath(), null);
-            imageView.setImageBitmap(bitmap);
-
-            e.printStackTrace();
-        }
 
         return view;
     }

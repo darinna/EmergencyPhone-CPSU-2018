@@ -27,9 +27,11 @@ import java.util.List;
 import pl.aprilapps.easyphotopicker.DefaultCallback;
 import pl.aprilapps.easyphotopicker.EasyImage;
 
-import static com.example.emergencyphone.db.DatabaseHelper.COL_IMAGE;
-import static com.example.emergencyphone.db.DatabaseHelper.COL_NUMBER;
-import static com.example.emergencyphone.db.DatabaseHelper.COL_TITLE;
+import static com.example.emergencyphone.db.DatabaseHelper.COL_DEPARTMENT;
+import static com.example.emergencyphone.db.DatabaseHelper.COL_NAME;
+import static com.example.emergencyphone.db.DatabaseHelper.COL_AGE;
+import static com.example.emergencyphone.db.DatabaseHelper.COL_POSITION;
+import static com.example.emergencyphone.db.DatabaseHelper.COL_TEL;
 import static com.example.emergencyphone.db.DatabaseHelper.TABLE_NAME;
 
 public class AddPhoneItemActivity extends AppCompatActivity {
@@ -48,7 +50,7 @@ public class AddPhoneItemActivity extends AppCompatActivity {
         mHelper = new DatabaseHelper(this);
         mDb = mHelper.getWritableDatabase();
 
-        Button saveButton = findViewById(R.id.save_button);
+        Button saveButton = findViewById(R.id.save_button3);
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -56,73 +58,39 @@ public class AddPhoneItemActivity extends AppCompatActivity {
             }
         });
 
-        ImageView logoImageView = findViewById(R.id.logo_image_view);
-        logoImageView.setOnClickListener(new View.OnClickListener() {
+        Button back_to_activity = findViewById(R.id.back_button);
+        back_to_activity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                EasyImage.openChooserWithGallery(AddPhoneItemActivity.this, "เลือกรูปภาพ", 0);
+                Intent intent = new Intent(AddPhoneItemActivity.this, MainActivity.class);
+                startActivity(intent);
             }
         });
+
+
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        EasyImage.handleActivityResult(requestCode, resultCode, data, this, new DefaultCallback() {
-            @Override
-            public void onImagesPicked(@NonNull List<File> list, EasyImage.ImageSource imageSource, int i) {
-                File logoFile = list.get(0);
-                Log.i(TAG, logoFile.getAbsolutePath());
-                Log.i(TAG, logoFile.getName());
-
-                File privateDir = getFilesDir();
-                File dstFile = new File(privateDir, logoFile.getName());
-                try {
-                    copy(logoFile, dstFile);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                mLogoFilename = logoFile.getName();
-                ImageView logoImageView = findViewById(R.id.logo_image_view);
-
-                Bitmap bitmap = BitmapFactory.decodeFile(logoFile.getAbsolutePath(), null);
-                logoImageView.setImageBitmap(bitmap);
-            }
-        });
-    }
-
-    public static void copy(File src, File dst) throws IOException {
-        InputStream in = new FileInputStream(src);
-        try {
-            OutputStream out = new FileOutputStream(dst);
-            try {
-                // Transfer bytes from in to out
-                byte[] buf = new byte[1024];
-                int len;
-                while ((len = in.read(buf)) > 0) {
-                    out.write(buf, 0, len);
-                }
-            } finally {
-                out.close();
-            }
-        } finally {
-            in.close();
-        }
-    }
 
     private void doInsertPhoneItem() {
-        EditText titleEditText = findViewById(R.id.title_edit_text);
-        EditText numberEditText = findViewById(R.id.number_edit_text);
+        EditText nameEditText = findViewById(R.id.name_edit_text1);
+        EditText ageEditText = findViewById(R.id.age_edit_text1);
+        EditText positionEditText = findViewById(R.id.position_edit_text1);
+        EditText departmentEditText = findViewById(R.id.department_edit_text1);
+        EditText telEditText = findViewById(R.id.tel_edit_text1);
 
-        String title = titleEditText.getText().toString();
-        String number = numberEditText.getText().toString();
+        String name = nameEditText.getText().toString();
+        String age = ageEditText.getText().toString();
+        String position = positionEditText.getText().toString();
+        String department = departmentEditText.getText().toString();
+        String tel = telEditText.getText().toString();
 
         ContentValues cv = new ContentValues();
-        cv.put(COL_TITLE, title);
-        cv.put(COL_NUMBER, number);
-        cv.put(COL_IMAGE, mLogoFilename);
+        cv.put(COL_NAME, name);
+        cv.put(COL_AGE, age);
+        cv.put(COL_POSITION, position);
+        cv.put(COL_DEPARTMENT, department);
+        cv.put(COL_TEL, tel);
+
         mDb.insert(TABLE_NAME, null, cv);
 
         finish();
